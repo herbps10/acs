@@ -4,15 +4,17 @@
 %html
 	%head
 		%title LACS Alumni Connect
+		%script{:src => "http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"}
 	
 %body
 	#fb-root
 
 	#wrapper
 		#header
+			%h1 LACS Alumni
 
-	#content
-		= yield
+		#content
+			= yield
 
 	%script{:src => "http://connect.facebook.net/en_US/all.js"}
 	%script{:src => "/script.js"}

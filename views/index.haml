@@ -1,4 +1,13 @@
-.login
-	<fb:login-button>Login with Facebook</fb:login-button>
+- if !@logged_in
+	<fb:login-button registration-url="http://acs:4567/register">Login with Facebook</fb:login-button>
 
-Hello, <span class='name'></span>!
+%p
+	Stay connected with LACS Alumni
+
+- $redis.smembers('ids').each do |id|
+	%p
+		%img{:src => "http://graph.facebook.com/" + $redis.hget(id, 'fbid') + "/picture"}
+		%a{:href => "http://facebook.com/user/" + $redis.hget(id, "fbid").to_s + "/#!/"}
+			%strong=$redis.hget(id, 'name')
+
+#map

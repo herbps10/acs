@@ -7,4 +7,12 @@ $(document).ready(function() {
 	};
 
 	var map = new google.maps.Map(document.getElementById('map'), myOptions);
+
+	<% @markers.each do |marker| %>
+		new google.maps.Marker({
+			position: new google.maps.LatLng(<%= marker["latitude"] %>, <%= marker["longitude"] %>),
+			map: map,
+			title: "<%= marker['name'] + ", " + marker['location_name'] %>"
+		});
+	<% end %>
 });

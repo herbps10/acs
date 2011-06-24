@@ -1,6 +1,5 @@
 require "rubygems"
 require "sinatra"
-require "redis"
 require "haml"
 require "erb"
 require "rest-client"
@@ -9,10 +8,13 @@ require "rest-graph"
 require "base64"
 require "uri"
 
+configure do
+	require "redis"
+	uri = URI.parse(ENV["REDISTOGO_URL"])
+	$redis = Redis.new :host => uri.host, :port => uri.port, :password => uri.password
+end
+
 $app_id = 109163289177099
-
-$redis = Redis.new
-
 
 helpers do
 	def decode_data data

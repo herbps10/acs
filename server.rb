@@ -15,6 +15,8 @@ configure do
 	$redis = Redis.new :host => uri.host, :port => uri.port, :password => uri.password
 end
 
+$base = "http://acs.heroku.com/"
+
 #$app_id = 109163289177099 # This is http://acs:4567
 $app_id = 219828024724404 # This is for heroku
 

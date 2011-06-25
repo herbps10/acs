@@ -5,7 +5,7 @@
 %p What are you doing with your life post ACS? Take a moment to read what others are up to, and, if you feel so inclined, add yourself to the list!
 
 - if !@logged_in
-	<fb:login-button registration-url="http://acs:4567/register" onlogin="onLogin()">Add Yourself with Facebook</fb:login-button>
+	<fb:login-button registration-url="#{$base}register" onlogin="onLogin()">Add Yourself with Facebook</fb:login-button>
 
 #already-registered
 	%p
@@ -44,4 +44,4 @@
 		- counter += 1
 
 - if !@logged_in
-	<fb:login-button registration-url="http://acs:4567/register" onlogin="onLogin()">Add Yourself with Facebook</fb:login-button>
+	<fb:login-button registration-url="#{$base}/register" onlogin="onLogin()">Add Yourself with Facebook</fb:login-button>

@@ -46,7 +46,7 @@ end
 
 get "/" do
 	if request["HTTP_HOST"] != nil
-		redirect "http://lacsalumni.com" if request["HTTP_HOST"].include?("lacsalumni.com") == false
+		redirect "http://lacsalumni.com" if request["HTTP_HOST"] != "lacsalumni.com"
 	end
 
 	@logged_in = logged_in?

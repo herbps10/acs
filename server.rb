@@ -45,8 +45,9 @@ helpers do
 end
 
 get "/" do
-	return request.inspect
-	#redirect "http://lacsalumni.com" if request["SERVER_NAME"] != nil && request["SERVER_NAME"] != "lacsalumni.com"
+	if request["SERVER_NAME"] == "acs.heroku.com"
+		redirect "http://lacsalumni.com"
+	end
 
 	@logged_in = logged_in?
 	

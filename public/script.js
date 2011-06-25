@@ -10,7 +10,11 @@ document.getElementById('fb-root').appendChild(e);
 
 var logged_in = false;
 window.fbAsyncInit = function() {
-	FB.init({appId: '109163289177099', status: true, cookie: true,
+	// acs:4567
+	//FB.init({appId: '109163289177099', status: true, cookie: true,
+	// 	xfbml: true});
+
+	FB.init({appId: '219828024724404', status: true, cookie: true,
 	 	xfbml: true});
 
 

@@ -45,7 +45,8 @@ helpers do
 end
 
 get "/" do
-	redirect "http://lacsalumni.com" if request["HTTP_HOST"].include?("lacsalumni.com") == false
+	return request.inspect
+	#redirect "http://lacsalumni.com" if request["HTTP_HOST"].include?("lacsalumni.com") == false
 
 	@logged_in = logged_in?
 	

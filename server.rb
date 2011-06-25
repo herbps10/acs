@@ -45,7 +45,7 @@ helpers do
 end
 
 get "/" do
-	return request.server_name
+	return request.SERVER_NAME
 	return request["SERVER_NAME"] == "acs.heroku.com" ? "yes" : "no"
 	if request["SERVER_NAME"] == "acs.heroku.com"
 		redirect "http://lacsalumni.com"

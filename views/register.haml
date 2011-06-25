@@ -1,1 +1,16 @@
-<fb:registration fields="[{'name': 'name'}, {'name': 'location'}, {'name': 'content', 'description': 'What are you up to these days?', 'type': 'text'}]" redirect-uri="http://acs:4567/register" />
+%h2 Register
+
+<fb:registration fields="[{'name': 'name'}, {'name': 'location'}, {'name': 'content', 'description': 'What are you up to these days?', 'type': 'text'}, {'name': 'year', 'description': 'What year did you graduate?', 'type':'text'}, {'name': 'first_name_only', 'description': 'Show only my first name', 'type': 'checkbox'}]" redirect-uri="http://acs:4567/register"></fb:registration>
+
+:plain
+	<script type='text/javascript'>
+		$(document).ready(function() {
+			$("#expand").click(function() {
+				var f = $("iframe")[0].contentWindow.document;
+				f.open();
+				f.close();
+					  
+				$("input", f).remove();
+			});
+		});
+	</script>

@@ -10,7 +10,7 @@ require "uri"
 
 configure do
 	require "redis"
-	uri = URI.parse(ENV["REDISTOGO_URL"])
+	uri = URI.parse("redis://herbps10:1d6933e71738f36484d4781c406a6567@bluegill.redistogo.com:9350/")
 	$redis = Redis.new :host => uri.host, :port => uri.port, :password => uri.password
 end
 
@@ -40,9 +40,17 @@ helpers do
 end
 
 get "/" do
-	#$rq = RestGraph.new :app_id => $app_id, :access_token => get_token
 	@logged_in = logged_in?
-	puts logged_in?
+	
+	if @logged_in
+		begin
+			$rq = RestGraph.new :app_id => $app_id, :access_token => get_token
+			@me = $rq.get('me')
+		rescue RestGraph::Error::InvalidAccessToken
+			
+		end
+	end
+
 	haml :index
 end
 
@@ -58,6 +66,8 @@ post "/register" do
 	{  
 		:name => data["registration"]["name"],
 		:content => data["registration"]["content"],
+		:year => data["registration"]["year"],
+		:first_name_only => data["registration"]["first_name_only"],
 		:location => data["registration"]["location"]["name"],
 		:location_id => data["registration"]["location"]["id"],
 		:fbid => data["user_id"]
@@ -91,4 +101,26 @@ get '/maps.js' do
 	end
 	
 	erb :maps
+end
+
+get '/flush' do
+	$redis.flushdb
+	redirect "/"
+end
+
+get '/delete' do
+	if logged_in?
+		rq = RestGraph.new :app_id => $app_id, :access_token => get_token
+
+		@me = rq.get('me')
+
+		$redis.smembers('ids').each do |id|
+			if $redis.hget(id, 'fbid') == @me['id']
+				$redis.del(id)
+				$redis.srem("ids", id)
+			end
+		end
+	end
+
+	redirect "/"
 end

@@ -1,13 +1,47 @@
+
+%p.message
+	ACS kids tend to do cool things. We want to know what you're up to.
+
+%p What are you doing with your life post ACS? Take a moment to read what others are up to, and, if you feel so inclined, add yourself to the list!
+
 - if !@logged_in
-	<fb:login-button registration-url="http://acs:4567/register">Login with Facebook</fb:login-button>
+	<fb:login-button registration-url="http://acs:4567/register" onlogin="onLogin()">Add Yourself with Facebook</fb:login-button>
 
-%p
-	Stay connected with LACS Alumni
-
-- $redis.smembers('ids').each do |id|
+#already-registered
 	%p
-		%img{:src => "http://graph.facebook.com/" + $redis.hget(id, 'fbid') + "/picture"}
-		%a{:href => "http://facebook.com/user/" + $redis.hget(id, "fbid").to_s + "/#!/"}
-			%strong=$redis.hget(id, 'name')
+		You've already registered. Thanks!
 
-#map
+#map-wrapper
+	#map
+
+%table{:id => "people"}
+	- counter = 0
+	- $redis.smembers('ids').each do |id|
+		%tr{:class => counter % 2 == 0 ? "even" : "odd"}
+			%td.image
+				%img{:src => "http://graph.facebook.com/" + $redis.hget(id, 'fbid') + "/picture"}
+			%td.info
+				%div.meta
+					Living in 
+					=$redis.hget(id, 'location') + ". "
+					Class of
+					=$redis.hget(id, 'year')
+
+				%a{:href => "http://facebook.com/user/" + $redis.hget(id, "fbid").to_s + "/#!/"}
+					%strong
+						- if $redis.hget(id, "first_name_only") == "true"
+							= $redis.hget(id, 'name').split(' ').at(0)
+						- else
+							= $redis.hget(id, 'name')
+
+				%div.content
+					=$redis.hget(id, 'content')
+				
+				- if @me != nil
+					- if @me['name'] == $redis.hget(id, 'name') && @me['id'] == $redis.hget(id, 'fbid')
+						%a{:href => "/delete"} delete my listing
+
+		- counter += 1
+
+- if !@logged_in
+	<fb:login-button registration-url="http://acs:4567/register" onlogin="onLogin()">Add Yourself with Facebook</fb:login-button>

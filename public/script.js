@@ -13,11 +13,15 @@ window.fbAsyncInit = function() {
 	FB.init({appId: '109163289177099', status: true, cookie: true,
 	 	xfbml: true});
 
+
 	checkLoggedIn();
 
 	updateFromFacebook();
-
 };
+
+function onLogin() {
+	$("#already-registered").show("slow");
+}
 
 function checkLoggedIn() {
 	FB.getLoginStatus(function(response) {

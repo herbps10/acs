@@ -44,6 +44,8 @@ helpers do
 end
 
 get "/" do
+	redirect "http://lacsalumni.com" if request["HTTP_HOST"] != "lacsalumni.com"
+
 	@logged_in = logged_in?
 	
 	if @logged_in

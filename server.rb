@@ -45,7 +45,8 @@ helpers do
 end
 
 get "/" do
-	redirect "http://lacsalumni.com" if request["SERVER_NAME"] != nil && request["SERVER_NAME"] != "lacsalumni.com"
+	return request.inspect
+	#redirect "http://lacsalumni.com" if request["SERVER_NAME"] != nil && request["SERVER_NAME"] != "lacsalumni.com"
 
 	@logged_in = logged_in?
 	

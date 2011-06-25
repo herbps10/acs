@@ -18,7 +18,8 @@ end
 $base = "http://acs.heroku.com/"
 
 #$app_id = 109163289177099 # This is http://acs:4567
-$app_id = 219828024724404 # This is for heroku
+#$app_id = 219828024724404 # This is for acs.heroku.com
+$app_id = 195546887162731 # This is for official lacsalumni.com
 
 helpers do
 	def decode_data data

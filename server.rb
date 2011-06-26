@@ -11,9 +11,9 @@ require "uri"
 
 configure do
 	require "redis"
-	#uri = URI.parse("redis://herbps10:1d6933e71738f36484d4781c406a6567@bluegill.redistogo.com:9350/")
-	#$redis = Redis.new :host => uri.host, :port => uri.port, :password => uri.password
-	$redis = Redis.new
+	uri = URI.parse("redis://herbps10:1d6933e71738f36484d4781c406a6567@bluegill.redistogo.com:9350/")
+	$redis = Redis.new :host => uri.host, :port => uri.port, :password => uri.password
+	#$redis = Redis.new
 end
 
 #$base = "http://acs:4567/"

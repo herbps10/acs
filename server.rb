@@ -17,7 +17,7 @@ configure do
 end
 
 #$base = "http://acs:4567/"
-$base = "http://lacsalumni.com"
+$base = "http://lacsalumni.com/"
 
 #$app_id = 109163289177099 # This is http://acs:4567
 #$app_id = 219828024724404 # This is for acs.heroku.com

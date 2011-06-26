@@ -88,3 +88,21 @@ label {
 	margin-top: 10px;
 	display: none;
 }
+
+form.update {
+	display: none;
+}
+
+form.update label {
+	float: left;
+	width: 150px;
+}
+
+form.update textarea, form.update input[type=text] {
+	display: block;
+	margin: 10px 0;
+}
+
+form.update textarea {
+	width: 70%;
+}

@@ -1,4 +1,3 @@
-
 %p.message
 	ACS kids tend to do cool things. We want to know what you're up to.
 
@@ -10,6 +9,8 @@
 #already-registered
 	%p
 		You've already registered. Thanks!
+
+%h2=logged_in? ? "logged in" : "not logged in"
 
 #map-wrapper
 	#map
@@ -36,10 +37,33 @@
 
 				%div.content
 					=$redis.hget(id, 'content')
+					%br
+					=$redis.hget(id, 'passions')
+					%br
+					=$redis.hget(id, 'influence')
 				
 				- if @me != nil
 					- if @me['name'] == $redis.hget(id, 'name') && @me['id'] == $redis.hget(id, 'fbid')
-						%a{:href => "/delete"} delete my listing
+						%a{:href => "/delete"} delete
+						%a{:href => "#", :class => "update"} update
+
+						%form{:action => "/update", :method => "post", :class => "update"}
+							%label Where do you live?
+							%input{:type => "text", :name => "location", :value => $redis.hget(id, "location")}
+
+							%label What are you up to?
+							%textarea{:name => "content",}= $redis.hget(id, "content")
+
+							%label What are you passionate about?
+							%textarea{:name => "passions"}= $redis.hget(id, "passions")
+
+							%label How has ACS influenced you?
+							%textarea{:name => "influence"}= $redis.hget(id, "influence")
+
+							%label What year did you graduate?
+							%input{:type => "text", :name => "year", :value => $redis.hget(id, "year")}
+
+							%input{:type => "submit", :value => "update"}
 
 		- counter += 1
 

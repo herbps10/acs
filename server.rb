@@ -11,10 +11,12 @@ require "uri"
 
 configure do
 	require "redis"
-	uri = URI.parse("redis://herbps10:1d6933e71738f36484d4781c406a6567@bluegill.redistogo.com:9350/")
-	$redis = Redis.new :host => uri.host, :port => uri.port, :password => uri.password
+	#uri = URI.parse("redis://herbps10:1d6933e71738f36484d4781c406a6567@bluegill.redistogo.com:9350/")
+	#$redis = Redis.new :host => uri.host, :port => uri.port, :password => uri.password
+	$redis = Redis.new
 end
 
+#$base = "http://acs:4567/"
 $base = "lacsalumni.com"
 
 #$app_id = 109163289177099 # This is http://acs:4567
@@ -70,6 +72,9 @@ end
 post "/register" do
 	data = JSON.parse(decode_data(params["signed_request"]))
 
+	rq = RestGraph.new :app_id => $app_id
+	location = rq.get(data["registration"]["location"]["id"])
+
 	$redis.incr("nextid")
 	id = $redis.get("nextid")
 	{  
@@ -79,6 +84,10 @@ post "/register" do
 		:first_name_only => data["registration"]["first_name_only"],
 		:location => data["registration"]["location"]["name"],
 		:location_id => data["registration"]["location"]["id"],
+		:location_longitude => location["longitude"],
+		:location_latitude => location["latitude"],
+		:passions => data["registration"]["passions"],
+		:influence => data["registration"]["influence"],
 		:fbid => data["user_id"]
 	}.each_pair { |key, value| $redis.hset(id, key, value) }
 
@@ -87,24 +96,61 @@ post "/register" do
 	redirect "/"
 end
 
-post "/update" do
-	id = params["id"]
+post '/update' do
+	redirect "/" if !logged_in?
+	
+	$rq = RestGraph.new :app_id => $app_id, :access_token => get_token
+	@me = $rq.get('me')
 
-	redirect "/"
+	$redis.smembers('ids').each do |id|
+		old_location = $redis.hget(id, "location")
+
+		if old_location != params["location"]
+			location_str = params['location'].gsub(' ', '+')
+			results = JSON.parse(RestClient.get("http://maps.googleapis.com/maps/api/geocode/json?address=#{location_str}&sensor=false").to_str)
+
+			longitude = results["results"][0]["geometry"]["location"]["lng"]
+			latitude = results["results"][0]["geometry"]["location"]["lat"]
+
+			$redis.hset(id, "location_longitude", longitude)
+			$redis.hset(id, "location_latitude", latitude)
+		end
+
+		if $redis.hget(id, 'fbid') == @me['id']
+			{
+				:content => params['content'],
+				:passions => params['passions'],
+				:influence => params['influence'],
+				:location => params['location'],
+				:year => params['year']
+			}.each_pair { |key, value| $redis.hset(id, key, value) }
+
+			redirect "/"
+		end
+	end
 end
 
 get '/maps.js' do
-	rq = RestGraph.new :app_id => $app_id
-
 	@markers = []
 	$redis.smembers("ids").each do |id|
-		location = rq.get($redis.hget(id, "location_id"))
+		lon = $redis.hget(id, "location_longitude")
+		if lon == nil or lon == ""
+			rq = RestGraph.new :app_id => $app_id
+			location = rq.get($redis.hget(id, "location_id"))
+
+			lat = location["location"]["latitude"]
+			lon = location["location"]["longitude"]
+		else
+			lat = $redis.hget(id, "location_latitude")
+			lon = $redis.hget(id, "location_longitude")
+		end
+
 		name = $redis.hget(id, "name")
 
 		@markers.push({
-			"longitude" => location["location"]["longitude"],
-			"latitude" => location["location"]["latitude"],
-			"location_name" => location["name"],
+			"longitude" => lon,
+			"latitude" => lat,
+			"location_name" => $redis.hget(id, "location"),
 			"name" => $redis.hget(id, "name")
 		})
 	end

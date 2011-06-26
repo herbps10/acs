@@ -12,8 +12,9 @@ var logged_in = false;
 window.fbAsyncInit = function() {
 	// acs:4567
 	//FB.init({appId: '109163289177099', status: true, cookie: true,
-	// 	xfbml: true});
+	 	//xfbml: true});
 
+	// lacsalumni.com
 	FB.init({appId: '195546887162731', status: true, cookie: true,
 	 	xfbml: true});
 
@@ -53,3 +54,12 @@ function updateFromFacebook() {
 function updateForm(user) {
 	$("form #facebook-id").val(user.id);
 }
+
+$(document).ready(function() {
+	$("a.update").click(function() {
+		$(this).remove();
+		$("form.update").show("slow");
+
+		return false;
+	});
+});

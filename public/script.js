@@ -1,6 +1,7 @@
 // jQuery Code
+//
 // Anything related to the Facebook buttons
-// should NOT be done here
+// should NOT be done from here
 $(document).ready(function() {
 	$("a.update").click(function() {
 		$(this).remove();

@@ -86,8 +86,8 @@ post "/register" do
 		:location_id => data["registration"]["location"]["id"],
 		:location_longitude => location["longitude"],
 		:location_latitude => location["latitude"],
-		:passions => data["registration"]["passions"],
-		:influence => data["registration"]["influence"],
+		:history => data["registration"]["history"],
+		:future => data["registration"]["future"],
 		:fbid => data["user_id"]
 	}.each_pair { |key, value| $redis.hset(id, key, value) }
 
@@ -119,8 +119,8 @@ post '/update' do
 		if $redis.hget(id, 'fbid') == @me['id']
 			{
 				:content => params['content'],
-				:passions => params['passions'],
-				:influence => params['influence'],
+				:history => params['history'],
+				:future => params['future'],
 				:location => params['location'],
 				:year => params['year']
 			}.each_pair { |key, value| $redis.hset(id, key, value) }

@@ -52,11 +52,11 @@
 							%label What are you up to?
 							%textarea{:name => "content",}= $redis.hget(id, "content")
 
-							%label What are you passionate about?
-							%textarea{:name => "passions"}= $redis.hget(id, "passions")
+							%label Where have you been since acs? familiar with any cool programs or places or jobs that have been worth sharing about?
+							%textarea{:name => "history"}= $redis.hget(id, "history")
 
-							%label How has ACS influenced you?
-							%textarea{:name => "influence"}= $redis.hget(id, "influence")
+							%label What are you trying to do in the next few months or years?
+							%textarea{:name => "future"}= $redis.hget(id, "future")
 
 							%label What year did you graduate?
 							%input{:type => "text", :name => "year", :value => $redis.hget(id, "year")}

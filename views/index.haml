@@ -36,9 +36,11 @@
 				%div.content
 					=$redis.hget(id, 'content')
 					%br
-					=$redis.hget(id, 'passions')
+					=$redis.hget(id, 'history')
 					%br
-					=$redis.hget(id, 'influence')
+					=$redis.hget(id, 'opportunities')
+					%br
+					=$redis.hget(id, 'future')
 				
 				- if @me != nil
 					- if @me['name'] == $redis.hget(id, 'name') && @me['id'] == $redis.hget(id, 'fbid')
@@ -52,8 +54,11 @@
 							%label What are you up to?
 							%textarea{:name => "content",}= $redis.hget(id, "content")
 
-							%label Where have you been since acs? familiar with any cool programs or places or jobs that have been worth sharing about?
+							%label Where have you been since acs? 
 							%textarea{:name => "history"}= $redis.hget(id, "history")
+
+							%label Are you familiar with any cool programs or places or jobs that have been worth sharing about?
+							%textarea{:name => "opportunities"}= $redis.hget(id, "opportunities")
 
 							%label What are you trying to do in the next few months or years?
 							%textarea{:name => "future"}= $redis.hget(id, "future")
@@ -65,5 +70,4 @@
 
 		- counter += 1
 
-- if !@logged_in
-	<fb:login-button registration-url="#{$base}/register" onlogin="onLogin()">Add Yourself with Facebook</fb:login-button>
+- if !@logged_in <fb:login-button registration-url="#{$base}/register" onlogin="onLogin()">Add Yourself with Facebook</fb:login-button>

@@ -88,6 +88,7 @@ post "/register" do
 		:location_latitude => location["latitude"],
 		:history => data["registration"]["history"],
 		:future => data["registration"]["future"],
+		:opportunities => data["registration"]["opportunities"],
 		:fbid => data["user_id"]
 	}.each_pair { |key, value| $redis.hset(id, key, value) }
 
@@ -121,6 +122,7 @@ post '/update' do
 				:content => params['content'],
 				:history => params['history'],
 				:future => params['future'],
+				:opportunities => params['opportunities'],
 				:location => params['location'],
 				:year => params['year']
 			}.each_pair { |key, value| $redis.hset(id, key, value) }

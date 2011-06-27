@@ -8,11 +8,26 @@ $(document).ready(function() {
 
 	var map = new google.maps.Map(document.getElementById('map'), myOptions);
 
-	<% @markers.each do |marker| %>
-		new google.maps.Marker({
+	var infoboxes = [];
+
+	<% @markers.each_index do |index| %>
+		<% marker = @markers[index] %>
+		marker<%= index %> = new google.maps.Marker({
 			position: new google.maps.LatLng(<%= marker["latitude"] %>, <%= marker["longitude"] %>),
 			map: map,
 			title: "<%= marker['name'] + ", " + marker['location_name'] %>"
+		});
+
+		infoboxes[<%= index %>] = new google.maps.InfoWindow({
+			content: "<h2><%= marker['name'] %></h2><%= marker['location_name'] %>"
+		});
+
+		google.maps.event.addListener(marker<%= index %>, 'click', function() {
+			for(var i = 0; i < infoboxes.length; i++) {
+				infoboxes[i].close();
+			}
+
+			infoboxes[<%= index %>].open(map, marker<%= index %>);
 		});
 	<% end %>
 });

@@ -1,21 +1,13 @@
 @import url("/reset.css");
 
+/* General Element Styles */
+
 h1 {
 	font-size: 25pt;
 }
 
 h4 {
 	margin: 5px 0 0 0;
-}
-
-#wrapper {
-	margin: 20px 0 0 50px;
-	width: 800px;
-	padding: 0 10px;
-}
-
-#header img {
-	float: right;
 }
 
 p {
@@ -30,6 +22,39 @@ p.message {
 	background: #FFF8ED;
 }
 
+label {
+	display: block;
+}
+
+/* Page Layout Styles */
+
+#wrapper {
+	margin: 20px 0 0 50px;
+	padding: 0 10px;
+	width: 800px;
+}
+
+#header img {
+	float: right;
+}
+
+#footer {
+	border-top: 1px solid #ccc;
+	width: 100%;
+	margin: 20px 0 30px 0;
+}
+
+
+/* Index Page Styles */
+
+#already-registered {
+	background: #F7FFED;
+	border: 1px solid #ccc;
+	padding-left: 10px;
+	margin-top: 10px;
+	display: none;
+}
+
 #map-wrapper {
 	width: 796px;
 	padding: 1px;
@@ -37,14 +62,14 @@ p.message {
 	border: 1px solid #ccc;
 	margin-top: 40px;
 }
+
 #map {
 	width: 100%;
 	height: 500px;
 }
 
-label {
-	display: block;
-}
+
+/* Index Page People Table Styles */
 
 #people {
 	margin:20px 0;
@@ -90,13 +115,8 @@ label {
 	margin: 5px 0 2px 0;
 }
 
-#already-registered {
-	background: #F7FFED;
-	border: 1px solid #ccc;
-	padding-left: 10px;
-	margin-top: 10px;
-	display: none;
-}
+
+/* Update Form Styles */
 
 form.update {
 	display: none;
@@ -116,8 +136,4 @@ form.update textarea {
 	width: 70%;
 }
 
-#footer {
-	border-top: 1px solid #ccc;
-	width: 100%;
-	margin: 20px 0 30px 0;
-}
+

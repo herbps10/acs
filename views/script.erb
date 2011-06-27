@@ -23,12 +23,7 @@ document.getElementById('fb-root').appendChild(e);
 }());
 
 window.fbAsyncInit = function() {
-	// acs:4567
-	//FB.init({appId: '109163289177099', status: true, cookie: true,
-	 	//xfbml: true});
-
-	// lacsalumni.com
-	FB.init({appId: '195546887162731', status: true, cookie: true,
+	FB.init({appId: '<%= settings.app_id %>', status: true, cookie: true,
 	 	xfbml: true});
 
 	// Code that relies on Facebook can be called from here

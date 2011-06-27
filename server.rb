@@ -10,18 +10,24 @@ require "base64"
 require "uri"
 
 configure do
+	set :environment, :production
+
 	require "redis"
-	uri = URI.parse("redis://herbps10:1d6933e71738f36484d4781c406a6567@bluegill.redistogo.com:9350/")
-	$redis = Redis.new :host => uri.host, :port => uri.port, :password => uri.password
-	#$redis = Redis.new
+	if settings.environment == :production
+		uri = URI.parse("redis://herbps10:1d6933e71738f36484d4781c406a6567@bluegill.redistogo.com:9350/")
+		$redis = Redis.new :host => uri.host, :port => uri.port, :password => uri.password
+	else
+		$redis = Redis.new
+	end
 end
 
-#$base = "http://acs:4567/"
-$base = "http://lacsalumni.com/"
-
-#$app_id = 109163289177099 # This is http://acs:4567
-#$app_id = 219828024724404 # This is for acs.heroku.com
-$app_id = 195546887162731 # This is for official lacsalumni.com
+if settings.environment == :production
+	set :base, "http://lacsalumni.com/"
+	set :app_id, 195546887162731 # This is for official lacsalumni.com
+else
+	set :base, "http://acs:4567/"
+	set :app_id, 109163289177099 # This is http://acs:4567
+end
 
 helpers do
 	# Decodes data that is returned from facebook registration plugin
@@ -40,7 +46,7 @@ helpers do
 	# the user is simply already logged into the facebook
 	# site.
 	def get_cookie
-		return request.cookies["fbs_" + $app_id.to_s]
+		return request.cookies["fbs_" + settings.app_id.to_s]
 	end
 
 	# Checks to see if the facebook cookie is set
@@ -76,7 +82,7 @@ get "/" do
 	# information about the user
 	if @logged_in
 		begin
-			$rq = RestGraph.new :app_id => $app_id, :access_token => get_token
+			$rq = RestGraph.new :app_id => settings.app_id, :access_token => get_token
 			@me = $rq.get('me')
 		rescue RestGraph::Error::InvalidAccessToken
 			# Ignore this error
@@ -96,7 +102,7 @@ post "/register" do
 	data = JSON.parse(decode_data(params["signed_request"]))
 
 	# Query Facebook for more location information
-	rq = RestGraph.new :app_id => $app_id
+	rq = RestGraph.new :app_id => settings.app_id
 	location = rq.get(data["registration"]["location"]["id"])
 
 	$redis.incr("nextid")
@@ -126,7 +132,7 @@ end
 post '/update' do
 	redirect "/" if !logged_in? # This obviously won't work if their is no logged in user
 	
-	$rq = RestGraph.new :app_id => $app_id, :access_token => get_token
+	$rq = RestGraph.new :app_id => settings.app_id, :access_token => get_token
 	@me = $rq.get('me')
 
 	# Walk through all the ids until we reach the current user's listing
@@ -194,7 +200,7 @@ get '/maps.js' do
 		lon = $redis.hget(id, "location_longitude")
 		
 		if lon == nil or lon == ""
-			rq = RestGraph.new :app_id => $app_id
+			rq = RestGraph.new :app_id => settings.app_id
 			location = rq.get($redis.hget(id, "location_id")) # Retrieves location information from facebook
 
 			lat = location["location"]["latitude"]
@@ -217,6 +223,10 @@ get '/maps.js' do
 	erb :maps
 end
 
+get '/script.js' do
+	erb :script
+end
+
 # Resets the database.
 get '/flush' do
 	$redis.flushdb
@@ -226,7 +236,7 @@ end
 # Deletes the listing of the user who is currently logged in
 get '/delete' do
 	if logged_in?
-		rq = RestGraph.new :app_id => $app_id, :access_token => get_token
+		rq = RestGraph.new :app_id => settings.app_id, :access_token => get_token
 		@me = rq.get('me')
 
 		# Walk through all the listings until you find the listing

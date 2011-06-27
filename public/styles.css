@@ -14,6 +14,10 @@ h4 {
 	padding: 0 10px;
 }
 
+#header img {
+	float: right;
+}
+
 p {
 	font-family: Palatino, sans-serif;
 	font-size: 13pt;
@@ -49,19 +53,20 @@ label {
 
 #people tr td {
 	padding: 3px;
-}
-
-#people tr.even td {
-	background: #EDF1FF;
 	border: 1px solid #CCC;
 }
 
 #people tr.even td {
+	background: #EDF1FF;
+}
+
+#people tr.odd td {
 	
 }
 
 #people tr td.image {
 	width: 50px;
+	vertical-align: top;
 }
 
 #people tr td.image img {
@@ -109,4 +114,10 @@ form.update textarea, form.update input[type=text] {
 
 form.update textarea {
 	width: 70%;
+}
+
+#footer {
+	border-top: 1px solid #ccc;
+	width: 100%;
+	margin: 20px 0 30px 0;
 }

@@ -34,13 +34,20 @@
 							= $redis.hget(id, 'name')
 
 				%div.content
-					=$redis.hget(id, 'content')
-					%br
-					=$redis.hget(id, 'history')
-					%br
-					=$redis.hget(id, 'opportunities')
-					%br
-					=$redis.hget(id, 'future')
+					- if $redis.hget(id, 'content') != nil
+						=$redis.hget(id, 'content')
+
+					- if $redis.hget(id, 'history') != nil
+						%h4 Life since ACS
+						=$redis.hget(id, 'history')
+
+					- if $redis.hget(id, 'opportunities') != nil
+						%h4 Opportunities
+						=$redis.hget(id, 'opportunities')
+
+					- if $redis.hget(id, 'future') != nil
+						%h4 Future Plans
+						=$redis.hget(id, 'future')
 				
 				- if @me != nil
 					- if @me['name'] == $redis.hget(id, 'name') && @me['id'] == $redis.hget(id, 'fbid')

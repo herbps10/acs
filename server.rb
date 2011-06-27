@@ -66,6 +66,11 @@ helpers do
 	def get_token
 		get_cookie.split("=").at(1).split("&").at(0)
 	end
+
+	# Displays the ox image on the top of the page
+	def display_ox
+		@ox = true
+	end
 end
 
 get "/" do
@@ -88,6 +93,9 @@ get "/" do
 			# Ignore this error
 		end
 	end
+
+	# Display the ox logo
+	display_ox
 
 	haml :index
 end
